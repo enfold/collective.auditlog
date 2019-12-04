@@ -5,8 +5,10 @@ from collective.auditlog.models import LogEntry
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getUtility
 
+
 try:
     from plone.app.async.interfaces import IAsyncService
+
     ASYNC_INSTALLED = True
 except ImportError:
     ASYNC_INSTALLED = False
@@ -15,11 +17,13 @@ try:
     import collective.celery
     from collective.auditlog.tasks import queue_job
     from celery.utils.log import get_task_logger
+
     logger = get_task_logger(__name__)
 except ImportError:
     queue_job = None
     import logging
-    logger = logging.getLogger('collective.auditlog')
+
+    logger = logging.getLogger("collective.auditlog")
 
 
 def runJob(context, **data):
@@ -43,7 +47,7 @@ def queueJob(obj, *args, **kwargs):
     queue a job async if available.
     otherwise, just run normal
     """
-    if queue_job and kwargs['action'] != 'Undo from ZMI':
+    if queue_job and kwargs["action"] != "Undo from ZMI":
         queue_job.delay(obj, *args, **kwargs)
     elif ASYNC_INSTALLED:
         try:
@@ -53,7 +57,8 @@ def queueJob(obj, *args, **kwargs):
             logger.exception(
                 "Error using plone.app.async with "
                 "collective.auditlog. logging without "
-                "plone.app.async...")
+                "plone.app.async..."
+            )
             runJob(obj, *args, **kwargs)
     else:
         runJob(obj, *args, **kwargs)

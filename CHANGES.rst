@@ -1,8 +1,24 @@
 Changelog
 =========
 
-1.3.4 (unreleased)
-------------------
+1.4 (unreleased)
+----------------
+
+- Make Arhcetype a soft dependency.
+  [ale-rt]
+
+- Align with Plone code style: black, isort.
+  [thet]
+
+- Fix soft dependency on formlib (#22)
+  [ale-rt]
+
+- Speed up rule retrieval
+  [ale-rt]
+
+- Added some memoized properties and methods to the `AuditActionExecutor` class
+  for easier customization
+  [ale-rt]
 
 - collective.celery integration
   [enfold]

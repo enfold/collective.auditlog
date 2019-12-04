@@ -5,16 +5,18 @@ So we get to do something funky with aborting transactions and joining in
 on the zope transaction
 """
 
-import threading
-from logging import getLogger
-
-from zope.interface import implementer
-from transaction.interfaces import ISavepointDataManager, IDataManagerSavepoint
-import transaction as transaction_manager
-from collective.auditlog.models import Base
 from collective.auditlog import db
+from collective.auditlog.models import Base
+from logging import getLogger
 from plone.app.contentrules import handlers as cr_handlers
+from transaction.interfaces import IDataManagerSavepoint
+from transaction.interfaces import ISavepointDataManager
+from zope.interface import implementer
+
+import threading
 import traceback
+import transaction as transaction_manager
+
 
 logger = getLogger(__name__)
 
@@ -31,7 +33,6 @@ def get():
 
 @implementer(ISavepointDataManager)
 class DataManager(object):
-
     def __init__(self, td):
         self._session = None
         self.td = td
@@ -42,7 +43,7 @@ class DataManager(object):
         if self._session is None:
             self._session = db.getSession()
             engine = db.getEngine()
-            if not engine.dialect.has_table(engine, 'audit'):
+            if not engine.dialect.has_table(engine, "audit"):
                 Base.metadata.create_all(bind=engine)
         return self._session
 
@@ -51,8 +52,10 @@ class DataManager(object):
             try:
                 self.session.commit()
             except:
-                logger.error('Error during audit log commit. '
-                             'Error stack: %s' % (traceback.format_exc()))
+                logger.error(
+                    "Error during audit log commit. "
+                    "Error stack: %s" % (traceback.format_exc())
+                )
         self.td.reset()
         self._clear_session()
 
@@ -101,7 +104,6 @@ class DataManager(object):
 
 @implementer(IDataManagerSavepoint)
 class Savepoint:
-
     def __init__(self, dm):
         self.dm = dm
         self.old = dm.session.new.copy()
@@ -118,7 +120,6 @@ class Savepoint:
 
 
 class TransactionData(object):
-
     def __init__(self):
         self.joined = False
         self.registered = False

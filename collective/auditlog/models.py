@@ -1,4 +1,8 @@
-from sqlalchemy import Column, Integer, Unicode, DateTime, String
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Unicode
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -6,7 +10,7 @@ Base = declarative_base()
 
 
 class LogEntry(Base):
-    __tablename__ = 'audit'
+    __tablename__ = "audit"
 
     id = Column(Integer, primary_key=True)
     user = Column(Unicode(255), nullable=True)
