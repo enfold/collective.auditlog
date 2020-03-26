@@ -15,6 +15,7 @@ from tempfile import mkstemp
 from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
+import json
 import os
 import transaction
 import unittest
@@ -161,8 +162,8 @@ class TestActions(unittest.TestCase):
             )
             self.assertEqual(db.logs[-1].action, u'workflow')
             self.assertEqual(
-                db.logs[-1].info,
-                u"workflow transition: publish; comments: "
+                json.loads(db.logs[-1].info),
+                {u'transition': u'publish', u'comments': u''}
             )
             self.reset_rule_filter()
             # ... retract the test page (adding a comment)
@@ -173,7 +174,7 @@ class TestActions(unittest.TestCase):
             )
             self.assertEqual(db.logs[-1].action, u'workflow')
             self.assertEqual(
-                db.logs[-1].info,
-                u"workflow transition: retract; "
-                u"comments: I've been commented \u2665"
+                json.loads(db.logs[-1].info),
+                {u'transition': u'retract',
+                 u'comments': u"I've been commented \u2665"}
             )

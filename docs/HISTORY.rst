@@ -31,6 +31,9 @@ Changelog
 - Use valid json in info field.
   [enfold]
 
+- Fix tests to reflect json in info field.
+  [enfold]
+
 
 1.3.3 (2018-07-12)
 ------------------
