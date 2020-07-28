@@ -34,6 +34,9 @@ Changelog
 - Fix tests to reflect json in info field.
   [enfold]
 
+- Make sure that the database tables are created on first use.
+  [enfold]
+
 
 1.3.3 (2018-07-12)
 ------------------

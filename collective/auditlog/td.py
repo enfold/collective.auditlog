@@ -11,7 +11,6 @@ from logging import getLogger
 from zope.interface import implementer
 from transaction.interfaces import ISavepointDataManager, IDataManagerSavepoint
 import transaction as transaction_manager
-from collective.auditlog.models import Base
 from collective.auditlog import db
 from plone.app.contentrules import handlers as cr_handlers
 import traceback
@@ -41,9 +40,6 @@ class DataManager(object):
     def session(self):
         if self._session is None:
             self._session = db.getSession()
-            engine = db.getEngine()
-            if not engine.dialect.has_table(engine, 'audit'):
-                Base.metadata.create_all(bind=engine)
         return self._session
 
     def commit(self, trans):
