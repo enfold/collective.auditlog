@@ -26,8 +26,8 @@ class AuditLog(PloneSandboxLayer):
                        context=configurationContext)
         z2.installProduct(app, 'collective.auditlog')
         # no async for testing
-        from collective.auditlog import async
-        async.queue_job = False
+        from collective.auditlog import async_svc
+        async_svc.queue_job = False
 
     def setUpPloneSite(self, portal):
         # install into the Plone site
