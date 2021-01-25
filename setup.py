@@ -40,6 +40,9 @@ setup(
         'sqlalchemy',
         'five.globalrequest',
         'five.formlib',  # plone 5
+        'plone.registry',
+        'Products.CMFCore',
+        'Products.Archetypes',
     ],
     extras_require={
         'async': [
@@ -47,6 +50,9 @@ setup(
         ],
         'celery': [
             'collective.celery',
+        ],
+        'test': [
+            'plone.app.testing',
         ]
     },
     entry_points="""
