@@ -14,7 +14,6 @@ from collective.auditlog.utils import getObjectInfo
 from collective.auditlog.utils import getSite
 from collective.auditlog.utils import getUID
 from plone.app.contentrules import handlers as cr_handlers
-from Products.Archetypes.interfaces import IBaseObject
 
 try:
     from plone.app.contentrules.handlers import (
@@ -73,14 +72,8 @@ def created_event(event):
 
     if IObjectCopiedEvent.providedBy(event):
         return  # ignore this event since we're listening to cloned instead
-    # The object added event executes too early for Archetypes objects.
-    # We need to delay execution until we receive a subsequent
-    # IObjectInitializedEvent
-    if IBaseObject.providedBy(obj):
-        cr_handlers.init()
-        cr_handlers._status.delayed_events[
-            'IObjectInitializedEvent-audit-%s' % getUID(obj)] = event
-    elif IContentish.providedBy(obj) or IComment.providedBy(obj):
+
+    if IContentish.providedBy(obj) or IComment.providedBy(obj):
         execute_event(obj, event)
     else:
         return
@@ -98,9 +91,6 @@ def archetypes_initialized(event):
     """
     obj = event.object
     if is_portal_factory(obj):
-        return
-
-    if not IBaseObject.providedBy(obj):
         return
 
     cr_handlers.init()

@@ -13,8 +13,6 @@ except ImportError:
     class IPloneFormGenField(Interface):
         pass
 
-from Products.Archetypes.interfaces import (
-    IObjectInitializedEvent, IObjectEditedEvent, IBaseObject)
 from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent, IObjectModifiedEvent,
     IObjectMovedEvent, IObjectRemovedEvent, IObjectAddedEvent)
@@ -63,15 +61,9 @@ class AuditActionExecutor(object):
         obj = event.object
         event_iface = [i for i in event.__implemented__.interfaces()][0]
 
-        # for archetypes we need to make sure we're getting the right moved
-        # event here so we do not duplicate
-        if (not IObjectEditedEvent.providedBy(event) and
-                rule is not None and event_iface != rule.rule.event):
+        if rule is not None and event_iface != rule.rule.event:
             return False
-        # if archetypes, initialization also does move events
-        if (IObjectMovedEvent.providedBy(event) and
-                IBaseObject.providedBy(obj) and
-                obj.checkCreationFlag()):
+        if IObjectMovedEvent.providedBy(event) and obj.checkCreationFlag():
             return False
         if req.environ.get('disable.auditlog', False):
             return False
@@ -121,9 +113,8 @@ class AuditActionExecutor(object):
             # need to keep track of removed events so it doesn't get called
             # more than once for each object
             action = 'removed'
-        elif (IObjectInitializedEvent.providedBy(event) or
-                IObjectCreatedEvent.providedBy(event) or
-                IObjectAddedEvent.providedBy(event)):
+        elif (IObjectCreatedEvent.providedBy(event) or
+              IObjectAddedEvent.providedBy(event)):
             action = 'added'
         elif IObjectMovedEvent.providedBy(event):
             # moves can also be renames. Check the parent object

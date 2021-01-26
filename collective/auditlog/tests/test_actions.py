@@ -8,13 +8,12 @@ from plone.app.testing import setRoles, login
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.contentrules.handlers import _status
 from plone.registry.interfaces import IRegistry
-from Products.Archetypes.event import ObjectEditedEvent
-from Products.Archetypes.event import ObjectInitializedEvent
 from Products.CMFCore.utils import getToolByName
 from tempfile import mkstemp
 from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
 import json
 import os
 import transaction
@@ -81,12 +80,7 @@ class TestActions(unittest.TestCase):
             title=title,
         )
         obj = self.portal[obj_id]
-        try:
-            # AT only
-            self.portal.page.unmarkCreationFlag()
-            notify(ObjectInitializedEvent(obj))
-        except AttributeError:
-            notify(ObjectCreatedEvent(obj))
+        notify(ObjectCreatedEvent(obj))
         # We need to commit here so that _p_jar isn't None and move will work
         transaction.savepoint(optimistic=True)
         return obj
@@ -111,7 +105,7 @@ class TestActions(unittest.TestCase):
         self.create_page()
 
         with tempDb() as db:
-            notify(ObjectEditedEvent(self.portal.page))
+            notify(ObjectModifiedEvent(self.portal.page))
             self.assertEqual(db.logs[-1].action, 'modified')
 
     @unittest.skip("The ObjectModifiedEvent seems not to be fired")

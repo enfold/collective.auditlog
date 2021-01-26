@@ -40,9 +40,9 @@ setup(
         'sqlalchemy',
         'five.globalrequest',
         'five.formlib',  # plone 5
+        'plone.app.iterate',
         'plone.registry',
         'Products.CMFCore',
-        'Products.Archetypes',
     ],
     extras_require={
         'async': [
