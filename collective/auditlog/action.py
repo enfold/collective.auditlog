@@ -16,7 +16,8 @@ except ImportError:
 from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent, IObjectModifiedEvent,
     IObjectMovedEvent, IObjectRemovedEvent, IObjectAddedEvent)
-from plone.app.iterate.relation import WorkingCopyRelation
+# XXX: plone.app.iterate seems to still have dependency on Archetypes. Commenting it out for now
+# from plone.app.iterate.relation import WorkingCopyRelation
 from OFS.interfaces import IObjectClonedEvent
 
 import inspect
@@ -177,8 +178,11 @@ class AuditActionExecutor(object):
                 # if enabled in control panel, use original object and move
                 # working copy path to working_copy
                 data['working_copy'] = '/'.join(obj.getPhysicalPath())
-                relationships = obj.getReferences(
-                    WorkingCopyRelation.relationship)
+
+                # XXX: plone.app.iterate seems to still have dependency on Archetypes. Commenting it out for now
+                # relationships = obj.getReferences(
+                #     WorkingCopyRelation.relationship)
+                relationships = list()
                 # check relationships, if none, something is wrong, not logging
                 # action
                 if len(relationships) > 0:

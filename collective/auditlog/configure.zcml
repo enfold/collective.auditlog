@@ -132,12 +132,12 @@
     for="zope.lifecycleevent.interfaces.IObjectMovedEvent"
     handler=".handlers.moved_event"
     />
-
+<!--
   <subscriber
     for="Products.Archetypes.interfaces.IObjectInitializedEvent"
     handler=".handlers.archetypes_initialized"
     />
-
+-->
   <subscriber
     for="OFS.interfaces.IObjectClonedEvent"
     handler=".handlers.execute_event"
