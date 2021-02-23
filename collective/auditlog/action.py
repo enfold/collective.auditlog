@@ -2,7 +2,7 @@ import json
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from zope.component import adapts
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.formlib import form
 
 from plone.app.contentrules.browser.formhelper import AddForm, EditForm
@@ -41,14 +41,14 @@ class IAuditAction(Interface):
     pass
 
 
+@implementer(IAuditAction, IRuleElementData)
 class AuditAction(SimpleItem):
-    implements(IAuditAction, IRuleElementData)
     element = 'plone.actions.Audit'
     summary = u"Audit"
 
 
+@implementer(IExecutable)
 class AuditActionExecutor(object):
-    implements(IExecutable)
     adapts(Interface, IAuditAction, Interface)
 
     def __init__(self, context, element, event):

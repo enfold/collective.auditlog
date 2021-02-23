@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
@@ -27,12 +27,11 @@ class IAuditCatalog(Interface):
     """
 
 
+@implementer(IAuditCatalog)
 class AuditCatalog(CatalogTool):
     """
     A specific launch catalog tool
     """
-
-    implements(IAuditCatalog)
 
     title = 'specific catalog'
     id = 'audit_catalog'
