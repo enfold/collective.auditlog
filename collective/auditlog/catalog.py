@@ -3,7 +3,7 @@ from datetime import datetime
 from zope.interface import Interface, implementer
 
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
+from AccessControl.class_init import InitializeClass
 from Products.ZCatalog.ZCatalog import ZCatalog
 from Products.CMFCore.interfaces._content import ICatalogAware
 from Products.CMFPlone.CatalogTool import CatalogTool
