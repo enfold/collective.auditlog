@@ -64,8 +64,6 @@ class AuditActionExecutor(object):
 
         if rule is not None and event_iface != rule.rule.event:
             return False
-        if IObjectMovedEvent.providedBy(event) and obj.checkCreationFlag():
-            return False
         if req.environ.get('disable.auditlog', False):
             return False
         return True
