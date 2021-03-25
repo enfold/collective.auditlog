@@ -34,7 +34,7 @@ def getEngine(conn_string=None, conn_parameters=None, req=None):
             conn_parameters = registry['collective.auditlog.interfaces.IAuditLogSettings.connectionparameters']  # noqa
         if not conn_parameters:
             conn_parameters = {}
-        elif isinstance(conn_parameters, basestring):
+        elif isinstance(conn_parameters, str):
             conn_parameters = loads(conn_parameters)
         engine = create_engine(conn_string, **conn_parameters)
         if not engine.dialect.has_table(engine, 'audit'):
