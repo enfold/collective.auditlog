@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.4 (unreleased)
+1.3.4 (2021-06-23)
 ------------------
 
 - collective.celery integration
