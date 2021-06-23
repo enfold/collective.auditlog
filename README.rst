@@ -82,13 +82,13 @@ except obj can be set to None if no value is available.
 
 In addition to control panel configuration, connection parameters can be
 set using the zope-conf-additional directive in the buildout. Note that
-this will take precedence over any control panel configuration. Example:
+this will take precedence over any control panel configuration. Example::
 
-zope-conf-additional =
-    <product-config collective.auditlog>
-        audit-connection-string postgres://enfold:enfold@localhost/auditlog
-        audit-connection-params {"pool_recycle": 3600, "echo": true}
-    </product-config>
+  zope-conf-additional =
+      <product-config collective.auditlog>
+          audit-connection-string postgres://enfold:enfold@localhost/auditlog
+          audit-connection-params {"pool_recycle": 3600, "echo": true}
+      </product-config>
 
 There is now a view for the audit log entries, located at @@auditlog-view.
 There is no link to it from the control panel at the moment. The view uses
@@ -112,19 +112,19 @@ a special catalog will be enabled to store plone indexing information as
 well.
 
 Once this storage is enabled, you can search the logs using a catalog-like
-query:
+query::
 
-from datetime import datetime
-from collective.auditlog.catalog import searchAudited
+  from datetime import datetime
+  from collective.auditlog.catalog import searchAudited
 
-from = datatime(2018,6,1)
-to = datetime(2018,12,31)
-query = {'portal_type': 'Document',
-         'review_state': 'published'}
-audited = searchAudited(from_date=from,
-                        to_date=to,
-                        actions=['added', 'modified'],
-                        **query)
+  from = datatime(2018,6,1)
+  to = datetime(2018,12,31)
+  query = {'portal_type': 'Document',
+           'review_state': 'published'}
+  audited = searchAudited(from_date=from,
+                          to_date=to,
+                          actions=['added', 'modified'],
+                          **query)
 
 All of the parameters are optional, but an empty query will return all
 indexed objects, so use with care.
@@ -138,35 +138,35 @@ can be made to look for those even if they are gone from Plone.
 Celery Integration
 ==================
 The collective.celery package requires adding the celery and
-collective.celery eggs to the mian buildout section eggs. Example:
+collective.celery eggs to the mian buildout section eggs. Example::
 
-eggs =
-    celery
-    Plone
-    collective.celery
+  eggs =
+      celery
+      Plone
+      collective.celery
 
 We still use the celery-broker part, for clarity. The celery part is
-still required, but is simpler:
+still required, but is simpler::
 
-[celery-broker]
-host = 127.0.0.1
-port = 6379
+  [celery-broker]
+  host = 127.0.0.1
+  port = 6379
 
-[celery]
-recipe = zc.recipe.egg
-environment-vars = ${buildout:environment-vars}
-eggs =
-    ${buildout:eggs}
-    flower
-scripts = pcelery flower
+  [celery]
+  recipe = zc.recipe.egg
+  environment-vars = ${buildout:environment-vars}
+  eggs =
+      ${buildout:eggs}
+      flower
+  scripts = pcelery flower
 
 The celery part depends on having some variables added to the main
-environment-vars section:
+environment-vars section::
 
-environment-vars =
-    CELERY_BROKER_URL redis://${celery-broker:host}:${celery-broker:port}
-    CELERY_RESULT_BACKEND redis://${celery-broker:host}:${celery-broker:port}
-    CELERY_TASKS collective.es.index.tasks
+  environment-vars =
+      CELERY_BROKER_URL redis://${celery-broker:host}:${celery-broker:port}
+      CELERY_RESULT_BACKEND redis://${celery-broker:host}:${celery-broker:port}
+      CELERY_TASKS collective.es.index.tasks
 
 Additional Zope configuration
 -----------------------------
@@ -213,3 +213,4 @@ Authors
 - Nathan van Gheem, Async integration, bug fixes, optimization.
 - Alessandro Pisa, bug fixing, testing
 - Enfold Systems, celery integration and audit view
+
