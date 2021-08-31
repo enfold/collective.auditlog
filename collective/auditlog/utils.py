@@ -1,6 +1,6 @@
 from Products.CMFCore.utils import getToolByName
+from collective.auditlog.async import queueCatalogEntry
 from collective.auditlog.async import queueJob
-from collective.auditlog.catalog import catalogEntry
 from collective.auditlog.interfaces import BeforeStoreAuditlogEntryEvent
 from datetime import datetime
 from plone.registry.interfaces import IRegistry
@@ -122,4 +122,4 @@ def addLogEntry(obj, data):
     queueJob(getSite(), **data)
 
     if storage != 'sql':
-        catalogEntry(obj, data)
+        queueCatalogEntry(obj, data)

@@ -37,6 +37,9 @@ Changelog
 - Make sure that the database tables are created on first use.
   [enfold]
 
+- Index the auditlog entry asynchronously.
+  [enfold]
+
 
 1.3.3 (2018-07-12)
 ------------------

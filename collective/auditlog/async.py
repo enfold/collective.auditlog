@@ -1,7 +1,9 @@
 # coding=utf-8
 from collective.auditlog import db
 from collective.auditlog import td
+from collective.auditlog.catalog import catalogEntry
 from collective.auditlog.models import LogEntry
+from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getUtility
 
@@ -13,11 +15,13 @@ except ImportError:
 
 try:
     import collective.celery
+    from collective.auditlog.tasks import queue_catalog_entry
     from collective.auditlog.tasks import queue_job
     from celery.utils.log import get_task_logger
     logger = get_task_logger(__name__)
 except ImportError:
     queue_job = None
+    queue_catalog_entry = None
     import logging
     logger = logging.getLogger('collective.auditlog')
 
@@ -57,3 +61,12 @@ def queueJob(obj, *args, **kwargs):
             runJob(obj, *args, **kwargs)
     else:
         runJob(obj, *args, **kwargs)
+
+
+def queueCatalogEntry(obj, data):
+    if not ICatalogAware.providedBy(obj):
+        return
+    if queue_catalog_entry:
+        queue_catalog_entry.delay(obj, data)
+    else:
+        catalogEntry(obj, data)
