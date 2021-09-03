@@ -40,6 +40,8 @@ Changelog
 - Index the auditlog entry asynchronously.
   [enfold]
 
+- Add package name to async task names.
+
 
 1.3.3 (2018-07-12)
 ------------------
