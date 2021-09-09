@@ -4,7 +4,8 @@ Changelog
 1.3.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add package name to async task names.
+  [enfold]
 
 
 1.3.4 (2021-06-23)
