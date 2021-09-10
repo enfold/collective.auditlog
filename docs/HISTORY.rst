@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.5 (unreleased)
+1.3.5 (2021-09-10)
 ------------------
 
 - Add package name to async task names.
