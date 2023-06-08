@@ -40,7 +40,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'sqlalchemy',
+        'sqlalchemy>=1.4',
         'five.globalrequest',
         'five.formlib',  # plone 5
         'plone.app.iterate',

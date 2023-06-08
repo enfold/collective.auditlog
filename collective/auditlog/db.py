@@ -4,6 +4,7 @@ from App.config import getConfiguration
 from json import loads
 from plone.registry.interfaces import IRegistry
 from sqlalchemy import create_engine
+from sqlalchemy import inspect
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from zope.component import getUtility
@@ -37,8 +38,8 @@ def getEngine(conn_string=None, conn_parameters=None, req=None):
         elif isinstance(conn_parameters, str):
             conn_parameters = loads(conn_parameters)
         engine = create_engine(conn_string, **conn_parameters)
-        if not engine.dialect.has_table(engine, 'audit'):
-            Base.metadata.create_all(bind=engine)
+        if not inspect(engine).has_table('audit'):
+            Base.metadata.create_all(engine)
     return engine
 
 

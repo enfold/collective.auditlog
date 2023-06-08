@@ -4,7 +4,8 @@ Changelog
 1.3.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Support sqlalchemy 1.4 and 2.0
+  [enfold]
 
 
 1.3.5 (2021-09-10)
