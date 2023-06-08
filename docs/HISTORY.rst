@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.6 (unreleased)
+1.3.6 (2023-06-08)
 ------------------
 
 - Support sqlalchemy 1.4 and 2.0
