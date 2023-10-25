@@ -4,7 +4,8 @@ Changelog
 1.3.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Close session after getting results.
+  [enfold]
 
 
 1.3.6 (2023-06-08)

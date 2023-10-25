@@ -54,22 +54,25 @@ class LogView(BrowserView):
         order = self.request.get('order', 'performed_on')
         query = self.request.get('query', '')
         session = db.getSession()
-        if self.direction == 'asc':
-            lines = session.query(LogEntry).order_by(order)
-        else:
-            lines = session.query(LogEntry).order_by(desc(order))
-        if query:
-            query = unicode(query)
-            lines = lines.filter(or_(LogEntry.user.contains(query),
-                                     LogEntry.uid.contains(query),
-                                     LogEntry.type.contains(query),
-                                     LogEntry.title.contains(query),
-                                     LogEntry.path.contains(query),
-                                     LogEntry.site_name.contains(query),
-                                     LogEntry.working_copy.contains(query),
-                                     LogEntry.action.contains(query),
-                                     LogEntry.info.contains(query))
-                                 )
-        lines = lines.limit(self.page_size)
-        lines = lines.offset((self.page - 1) * self.page_size)
-        return lines.all()
+        try:
+            if self.direction == 'asc':
+                lines = session.query(LogEntry).order_by(order)
+            else:
+                lines = session.query(LogEntry).order_by(desc(order))
+            if query:
+                query = unicode(query)
+                lines = lines.filter(or_(LogEntry.user.contains(query),
+                                         LogEntry.uid.contains(query),
+                                         LogEntry.type.contains(query),
+                                         LogEntry.title.contains(query),
+                                         LogEntry.path.contains(query),
+                                         LogEntry.site_name.contains(query),
+                                         LogEntry.working_copy.contains(query),
+                                         LogEntry.action.contains(query),
+                                         LogEntry.info.contains(query))
+                                     )
+            lines = lines.limit(self.page_size)
+            lines = lines.offset((self.page - 1) * self.page_size)
+            return lines.all()
+        finally:
+            session.close()
