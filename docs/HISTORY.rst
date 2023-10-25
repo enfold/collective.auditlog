@@ -4,6 +4,9 @@ Changelog
 1.3.7 (unreleased)
 ------------------
 
+- Don't try to convert query to unicode if we are running with python 3.
+  [enfold]
+
 - Close session after getting results.
   [enfold]
 

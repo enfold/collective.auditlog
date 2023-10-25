@@ -46,6 +46,7 @@ setup(
         'plone.app.iterate',
         'plone.registry',
         'Products.CMFCore',
+        'six',
     ],
     extras_require={
         'async': [

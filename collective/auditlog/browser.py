@@ -1,3 +1,4 @@
+import six
 from Products.Five.browser import BrowserView
 from collective.auditlog import db
 from collective.auditlog.models import LogEntry
@@ -60,7 +61,8 @@ class LogView(BrowserView):
             else:
                 lines = session.query(LogEntry).order_by(desc(order))
             if query:
-                query = unicode(query)
+                if six.PY2:
+                    query = unicode(query)
                 lines = lines.filter(or_(LogEntry.user.contains(query),
                                          LogEntry.uid.contains(query),
                                          LogEntry.type.contains(query),
