@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.7 (unreleased)
+1.3.7 (2023-10-25)
 ------------------
 
 - Don't try to convert query to unicode if we are running with python 3.
