@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.8 (unreleased)
+1.3.8 (2024-05-21)
 ------------------
 
 - Add userid, name, and email columns to auditlog view.
