@@ -1,7 +1,8 @@
 import six
-from Products.Five.browser import BrowserView
 from collective.auditlog import db
 from collective.auditlog.models import LogEntry
+from plone.api import user as user_api
+from Products.Five.browser import BrowserView
 from sqlalchemy import desc
 from sqlalchemy import or_
 
@@ -10,16 +11,18 @@ class LogView(BrowserView):
 
     page_size = 100
 
-    columns = [{'name': 'user', 'label': 'User'},
-               {'name': 'performed_on', 'label': 'Date'},
-               {'name': 'uid', 'label': 'UID'},
-               {'name': 'type', 'label': 'Type'},
-               {'name': 'title', 'label': 'Title'},
-               {'name': 'path', 'label': 'Path'},
-               {'name': 'site_name', 'label': 'Site'},
-               {'name': 'working_copy', 'label': 'Working Copy'},
-               {'name': 'action', 'label': 'Action'},
-               {'name': 'info', 'label': 'Notes'}]
+    columns = [{'name': 'userid', 'label': 'User Id', 'sortable': True},
+               {'name': 'name', 'label': 'Name', 'sortable': False},
+               {'name': 'email', 'label': 'Email', 'sortable': False},
+               {'name': 'performed_on', 'label': 'Date', 'sortable': True},
+               {'name': 'uid', 'label': 'UID', 'sortable': True},
+               {'name': 'type', 'label': 'Type', 'sortable': True},
+               {'name': 'title', 'label': 'Title', 'sortable': True},
+               {'name': 'path', 'label': 'Path', 'sortable': True},
+               {'name': 'site_name', 'label': 'Site', 'sortable': True},
+               {'name': 'working_copy', 'label': 'Working Copy', 'sortable': True},
+               {'name': 'action', 'label': 'Action', 'sortable': True},
+               {'name': 'info', 'label': 'Notes', 'sortable': True}]
 
     @property
     def page(self):
@@ -29,7 +32,7 @@ class LogView(BrowserView):
 
     @property
     def direction(self):
-        dir = self.request.get('direction', 'asc')
+        dir = self.request.get('direction', 'desc')
         return dir
 
     def new_direction(self, order, column):
@@ -53,6 +56,8 @@ class LogView(BrowserView):
     @property
     def loglines(self):
         order = self.request.get('order', 'performed_on')
+        if order == 'userid':
+            order = 'user'
         query = self.request.get('query', '')
         session = db.getSession()
         try:
@@ -75,6 +80,34 @@ class LogView(BrowserView):
                                      )
             lines = lines.limit(self.page_size)
             lines = lines.offset((self.page - 1) * self.page_size)
-            return lines.all()
+            lines = lines.all()
+            results = list()
+            for line in lines:
+                username = line.user
+                user = user_api.get(username=username)
+                if not user:
+                    user = user_api.get(userid=username)
+                if user:
+                    username = user.getUserName()
+                    userid = user.getId()
+                    fullname = user.getProperty('fullname')
+                    if not fullname:
+                        fullname = username
+                    last_name = user.getProperty('last_name', default=None)
+                    if last_name:
+                        first_name = user.getProperty('first_name')
+                        name = f'{last_name}, {first_name}'
+                    else:
+                        name = fullname
+                    email = user.getProperty('email')
+                else:
+                    userid = name = email = username
+                result = dict(userid=userid, name=name, email=email)
+                for column in self.columns:
+                    column_name = column['name']
+                    if column_name not in ('userid', 'name', 'email'):
+                        result[column_name] = getattr(line, column_name, '')
+                results.append(result)
+            return results
         finally:
             session.close()

@@ -4,7 +4,8 @@ Changelog
 1.3.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add userid, name, and email columns to auditlog view.
+  [enfold]
 
 
 1.3.7 (2023-10-25)
