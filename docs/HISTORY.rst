@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.9 (unreleased)
+1.3.9 (2024-06-26)
 ------------------
 
 - Don't fail if event object is a zope.schema Field.
