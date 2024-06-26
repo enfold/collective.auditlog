@@ -5,6 +5,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.lifecycleevent import IObjectAddedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import IObjectCopiedEvent
+from zope.schema import Field
 from plone.app.discussion.interfaces import IComment
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IContentish
@@ -39,6 +40,8 @@ def execute_event(obj, event=None):
         # ActionSuceededEvent does not send an object first
         event = obj
         obj = event.object
+    if isinstance(obj, Field):
+        return
     executor = None
     for ev in get_automatic_events():
         if ev.providedBy(event) and obj is not None:

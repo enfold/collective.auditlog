@@ -4,7 +4,8 @@ Changelog
 1.3.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Don't fail if event object is a zope.schema Field.
+  [enfold]
 
 
 1.3.8 (2024-05-21)
