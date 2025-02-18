@@ -1,7 +1,7 @@
 import json
 from importlib import import_module
 from zope.component import getUtility
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.lifecycleevent import IObjectAddedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import IObjectCopiedEvent
@@ -15,24 +15,6 @@ from collective.auditlog.utils import getObjectInfo
 from collective.auditlog.utils import getSite
 from collective.auditlog.utils import getUID
 from plone.app.contentrules import handlers as cr_handlers
-
-try:
-    from plone.app.contentrules.handlers import (
-        execute_rules, execute, is_portal_factory)
-except ImportError:
-    from Acquisition import aq_inner, aq_parent
-    from plone.app.contentrules.handlers import execute, is_portal_factory
-    # copied from plone.app.iterate 2.0:
-
-    def execute_rules(event):
-        """ When an action is invoked on an object,
-        execute rules assigned to its parent.
-        Base action executor handler """
-
-        if is_portal_factory(event.object):
-            return
-
-        execute(aq_parent(aq_inner(event.object)), event)
 
 
 def execute_event(obj, event=None):
@@ -51,7 +33,7 @@ def execute_event(obj, event=None):
     if executor is None:
         # plone sends some events twice, first wrapped. Ignore those.
         if getattr(event, 'object', None) is not None:
-            execute_rules(event)
+            cr_handlers.execute_rules(event)
 
 
 def moved_event(event):
@@ -69,9 +51,6 @@ def moved_event(event):
 
 def created_event(event):
     obj = event.object
-
-    if is_portal_factory(obj):
-        return
 
     if IObjectCopiedEvent.providedBy(event):
         return  # ignore this event since we're listening to cloned instead
@@ -93,8 +72,6 @@ def archetypes_initialized(event):
     initialised.
     """
     obj = event.object
-    if is_portal_factory(obj):
-        return
 
     cr_handlers.init()
     delayed_event = cr_handlers._status.delayed_events.get(
