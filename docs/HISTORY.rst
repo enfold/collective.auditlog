@@ -4,7 +4,9 @@ Changelog
 1.3.10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Don't require five.globalrequest
+  [enfold]
+
 
 
 1.3.9 (2024-06-26)
