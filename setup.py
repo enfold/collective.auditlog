@@ -41,7 +41,7 @@ setup(
     install_requires=[
         'setuptools',
         'sqlalchemy>=1.4',
-        'five.globalrequest',
+        'zope.globalrequest',
         'five.formlib',  # plone 5
         'plone.app.iterate',
         'plone.registry',

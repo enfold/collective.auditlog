@@ -7,7 +7,7 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.auditlog">
 
-  <include package="five.globalrequest" />
+  <include package="zope.globalrequest" />
   <include package="plone.app.registry" />
 
   <five:registerPackage package="." initialize=".initialize" />
