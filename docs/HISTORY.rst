@@ -4,6 +4,9 @@ Changelog
 1.3.10 (unreleased)
 -------------------
 
+- Use portal_setup to check if installed.
+  [enfold]
+
 - Don't require five.globalrequest
   [enfold]
 

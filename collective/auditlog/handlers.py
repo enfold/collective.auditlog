@@ -1,4 +1,5 @@
 import json
+import logging
 from importlib import import_module
 from zope.component import getUtility
 from zope.interface.interfaces import ComponentLookupError
@@ -9,12 +10,16 @@ from zope.schema import Field
 from plone.app.discussion.interfaces import IComment
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IContentish
+from Products.GenericSetup.tool import UNKNOWN
 from collective.auditlog.action import AuditActionExecutor
 from collective.auditlog.utils import addLogEntry
 from collective.auditlog.utils import getObjectInfo
 from collective.auditlog.utils import getSite
 from collective.auditlog.utils import getUID
 from plone.app.contentrules import handlers as cr_handlers
+
+
+logger = logging.getLogger('collective.auditlog')
 
 
 def execute_event(obj, event=None):
@@ -86,9 +91,10 @@ def get_automatic_events():
     events = []
     site = getSite()
     try:
-        qi = site.portal_quickinstaller
-        installed = qi.isProductInstalled('collective.auditlog')
+        ps = site.portal_setup
+        installed = ps.getLastVersionForProfile('profile-collective.auditlog:default') != UNKNOWN
     except AttributeError:
+        logger.exception('Not installed')
         installed = False
     if installed:
         try:
@@ -103,6 +109,7 @@ def get_automatic_events():
                     events.append(automatic)
         except ComponentLookupError:
             # no registry, no events
+            logger.exception('Failed to get automatic events from collective.auditlog')
             pass
     return events
 
